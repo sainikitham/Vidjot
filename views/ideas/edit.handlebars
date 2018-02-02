@@ -1,6 +1,7 @@
 <div class="card">
   <div class="card-body">
-    <form method="post" action="/ideas">
+    <form method="post" action="/ideas/{{idea.id}}?_method=PUT">
+    <input type="hidden" name="_method" value="PUT">
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" class="form-control" name="title" placeholder="Enter the title" value="{{idea.title}}" required>
@@ -8,8 +9,7 @@
     <div class="form-group">
         <label for="details">Details</label>
         <textarea class="form-control" rows="4" placeholder="Enter the details" name="details" required>{{idea.details}}</textarea>
-    </div>
-    
+    </div>    
     <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>

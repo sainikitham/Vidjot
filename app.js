@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
-var exphbs  = require('express-handlebars');
-var bodyParser = require('body-parser')
+const exphbs  = require('express-handlebars');
+const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 require('./models/Idea');
 
@@ -18,8 +19,10 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(methodOverride('_method'));
+
 app.get('/', (req,res) => {
-    const title = 'welcome to the world!'
+    const title = 'welcome to the Vidjot!'
     res.render('index', {
         title: title
     });
@@ -39,6 +42,7 @@ app.get('/ideas', (req, res) => {
 app.get('/ideas/add', (req, res) => {
     res.render('ideas/add');
 });
+
 app.post('/ideas', (req, res) => {
     let errors = [];
     if(!req.body.title){
@@ -72,6 +76,23 @@ app.get('/ideas/edit/:id',(req, res) => {
         });
     });
     
+});
+app.put('/ideas/:id', (req, res) => {
+    Idea.findOne({
+        _id: req.params.id
+    }).then(idea => {        
+        idea.title = req.body.title;
+        idea.details = req.body.details;    
+        idea.save().then(() => {
+            res.redirect('/ideas')
+        });     
+    });
+      
+  });
+app.delete('/ideas/:id', (req, res) => {
+    Idea.remove({_id: req.params.id}).then(() => {
+        res.redirect('/ideas')
+    });
 });
 const port = 5000;
 app.listen(port, () => {
