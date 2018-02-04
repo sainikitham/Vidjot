@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser')
@@ -17,6 +18,8 @@ mongoose.connect('mongodb://localhost/vidjot-dev')
 .catch((err) => console.log(err));
 
 const Idea = mongoose.model('ideas');
+
+app.use(express.static('public'));
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
